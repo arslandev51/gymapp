@@ -8,7 +8,7 @@ from django.conf import settings
 class User(AbstractUser): #username, email, password, first_name, last_name are inbuilt
   ROLE_CHOICES = [
     ('ADMIN','Admin'),
-    ('MEMBER','Member'),
+    ('MEMBER','Member'), 
   ]
   role = models.CharField(max_length=20,choices=ROLE_CHOICES,default='MEMBER')
   phone = models.CharField(max_length=15,blank=True)
