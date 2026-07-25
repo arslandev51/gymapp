@@ -46,5 +46,7 @@ urlpatterns = [
     path('member-login/', member_login_view, name='member_login'),
     path('member-dashboard/', member_dashboard_view, name='member_dashboard'),
     path('member-attendance/', member_attendance, name='member_attendance'),
-    path('member-membership/', member_membership, name='member_membership')
+    path('member-membership/', member_membership, name='member_membership'),
+    path('member-payments/',member_payments,name='member_payments'),
+    path('member-workout-plans/',member_workout_plans,name='member_workout_plans')
 ]
