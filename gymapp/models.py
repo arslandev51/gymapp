@@ -36,7 +36,7 @@ class Trainer(models.Model):
     
 class MemberProfile(models.Model):
   GENDER_CHOICES = (    
-    ('MALE','Male'),
+    ('MALE','Male'),    
     ('FEMALE','Female'),
     ('OTHER','Other')
   )
