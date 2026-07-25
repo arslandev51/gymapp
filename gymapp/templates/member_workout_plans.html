@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2 class="mb-3">My Workout / Diet Plans</h2>
+
+{% if workout_plans %}
+<div class="row g-3">
+  {% for wp in workout_plans %}
+    <div class="col-md-6 mb-4">
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+          {{ wp.title }}
+        </div>
+        <div class="card-body">
+          <p class="small text-muted mb-1">Created at: {{ wp.created_at }}</p>
+          <p style="white-space: pre-line;">{{ wp.description }}</p>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+{% else %}
+<p>You have no workout or diet plans assigned yet. Please check back later or contact the gym</p>
+{% endif %}
+
+{% endblock %}
+
