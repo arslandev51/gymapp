@@ -27,7 +27,7 @@ class MembershipPlan(models.Model):
   
 class Trainer(models.Model):
   name = models.CharField(max_length=100)
-  mobile = models.CharField(max_length=15)
+  mobile = models.CharField(max_length=15) 
   specialization = models.CharField(max_length=200)
   shift_timing = models.CharField(max_length=200)
 
@@ -35,7 +35,7 @@ class Trainer(models.Model):
     return f"{self.name} - {self.specialization}"
     
 class MemberProfile(models.Model):
-  GENDER_CHOICES = (
+  GENDER_CHOICES = ( 
     ('MALE','Male'),
     ('FEMALE','Female'),
     ('OTHER','Other')
