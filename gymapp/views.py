@@ -540,6 +540,7 @@ def member_membership(request):
     days_remaining = None
     total_paid = 0
     remaining = None
+    membership_status = "No Membership"
 
     if member.membership_end:
         days_remaining = (member.membership_end - timezone.now().date()).days
@@ -570,3 +571,15 @@ def member_membership(request):
         'remaining' : remaining
     }
     return render(request, 'member_membership.html',context)
+
+@member_required
+def member_payments(request):
+    member_profile = MemberProfile.objects.get(user=request.user)
+    payments = Payment.objects.filter(member=member_profile).order_by('-payment_date')
+    return render(request,'member_payments.html',{'payments':payments})
+
+@member_required
+def member_workout_plans(request):
+    member_profile = MemberProfile.objects.get(user=request.user)
+    workout_plans = WorkoutPlan.objects.filter(member=member_profile).order_by('-created_at')
+    return render(request,'member_workout_plans.html',{'workout_plans':workout_plans})
