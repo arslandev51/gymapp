@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.1/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"/>
+    <title>Gym App</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#"><i class="fas fa-dumbbell"></i> My Gym</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ms-auto">
+        {% if user.is_authenticated %}
+          {% if user.role == 'ADMIN' %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin_dashboard' %}">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin_member_list' %}">Members</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin_plans_list' %}">Plans</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin_trainer_list' %}">Trainers</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin_payments_list' %}">Payments</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin_attendance_list' %}">Attendance</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin_equipment_list' %}">Equipment</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin_enquiries_list' %}">Enquiries</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin_workout_plans_list' %}">Workout Plans</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'home' %}">Feedback</a>
+          </li>
+          {% elif user.role == 'MEMBER' %}
+          <li class="nav-item">
+           <a class="nav-link" href="{% url 'home' %}">Dashboard</a>
+          </li>
+          <li class="nav-item">
+           <a class="nav-link" href="{% url 'home' %}">My Profile</a>
+          </li>
+          <li class="nav-item">
+           <a class="nav-link" href="{% url 'home' %}">Membership</a>
+          </li>
+          <li class="nav-item">
+           <a class="nav-link" href="{% url 'member_attendance' %}">Attendance</a>
+          </li>
+          <li class="nav-item">
+           <a class="nav-link" href="{% url 'home' %}">Payments</a>
+          </li>
+          <li class="nav-item">
+           <a class="nav-link" href="{% url 'home' %}">Workout Plans</a>
+          </li>
+          <li class="nav-item">
+           <a class="nav-link" href="{% url 'home' %}">Feedback</a>
+          </li>
+          {% endif %}
+          <li class="nav-item">
+           <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+          </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'home' %}">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'about' %}">About</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'admin_login' %}">Admin Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'member_login' %}">Member Login</a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container mt-4">
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+
+{% block content %}
+
+{% endblock %}
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.1/js/bootstrap.min.js"></script>
+</body>
+</html>

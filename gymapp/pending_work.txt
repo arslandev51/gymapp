@@ -1,0 +1,4 @@
+admin payment
+when we add payment on notes section nothing show 
+admin attendance 
+on attendance page only on user attendance show
