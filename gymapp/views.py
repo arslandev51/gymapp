@@ -508,6 +508,22 @@ def admin_payment_add(request):
         return redirect('admin_payments_list')
     return render(request, 'admin_payment_form.html',{'members':members,'plans':plans})
 
+@admin_required
+def admin_feedbacks_list(request):
+    member_id = request.GET.get('member_id')
+    feedbacks = Feedback.objects.select_related('member').all().order_by('-created_at')
+    members = MemberProfile.objects.all().order_by('full_name')
+
+    if member_id:
+        feedbacks = feedbacks.filter(member_id=member_id)
+
+    context = {
+        'feedbacks': feedbacks,
+        'members' : members,
+        'selected_members_id' : int(member_id) if member_id else None,
+    }
+    return render(request, 'admin_feedbacks_list.html',context)
+
 # member section
 def member_login_view(request):
     if request.method == 'POST':
@@ -519,12 +535,21 @@ def member_login_view(request):
             messages.success(request,'Logged in successfully')
             return redirect('member_dashboard')
         else:
-            messages.error(request,'Invalid credentials or not an admin.')
+            messages.error(request,'Invalid credentials or not an member.')
     return render(request,'member_login.html')
 
 @member_required
 def member_dashboard_view(request):
-    return render(request,'member_dashboard.html')
+    member = request.user.member_profile
+    total_attendance = member.attendances.count()
+    total_payments = member.payment.count()
+    workout_count = member.workout_plans.count()
+    return render(request,'member_dashboard.html',{
+        'member': member,
+        'total_attendance': total_attendance,
+        'total_payments': total_payments,
+        'workout_count': workout_count
+    })
 
 @member_required
 def member_attendance(request):
@@ -619,8 +644,22 @@ def member_change_password(request):
             return redirect('member_change_password')
 
         request.user.set_password(new_password)
-        request.use.save()
+        request.user.save()
         messages.success(request, 'Password changed successfully! Please log in again')
         return redirect('member_login')
     return render(request, 'member_change_password.html')
+
+@member_required
+def member_feedback(request):
+    member = request.user.member_profile
+    if request.method == 'POST':
+        message = request.POST.get('message')
+        if message:
+            Feedback.objects.create(member=member, message=message)
+            messages.success(request, 'Your feedback has been submitted successfully!')
+            return redirect('member_feedback') #redirect to feedback page after submitted
+        else:
+            messages.error(request, 'Please enter your feedback before submitting.')
+    feedbacks = member.feedback.all().order_by('-created_at')
+    return render(request, 'member_feedback.html',{'feedbacks': feedbacks})
 

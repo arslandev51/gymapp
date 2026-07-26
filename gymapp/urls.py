@@ -41,6 +41,7 @@ urlpatterns = [
     #Manage Payments
     path('admin_payments/', admin_payments_list, name='admin_payments_list'),
     path('admin_payment_add/',admin_payment_add,name='admin_payment_add'),
+    path('member-feedbacks-list', admin_feedbacks_list,name='admin_feedbacks_list'),
 
     # member section
     path('member-login/', member_login_view, name='member_login'),
@@ -51,5 +52,6 @@ urlpatterns = [
     path('member-workout-plans/',member_workout_plans,name='member_workout_plans'),
     path('member-profile/', member_profile, name='member_profile'),
     path('member-profile-edit', member_profile_edit, name='member_profile_edit'),
-    path('member-change-password/', member_change_password, name='member_change_password')
+    path('member-change-password/', member_change_password, name='member_change_password'),
+    path('member-feedback/', member_feedback, name='member_feedback')
 ]
