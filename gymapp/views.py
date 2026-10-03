@@ -49,7 +49,7 @@ def member_required(view_func):
     '''Decorator to restrict access to member user only'''
     def wrapper(request, *args, **kwargs):
         if not request.user.is_authenticated or getattr(request.user,'role',None)!='MEMBER':
-            messages.error(request,'You must be an admin to access this page')
+            messages.error(request,'You must be an member to access this page')
             return redirect('member_login')
         return view_func(request, *args, **kwargs)
     return wrapper
@@ -508,22 +508,6 @@ def admin_payment_add(request):
         return redirect('admin_payments_list')
     return render(request, 'admin_payment_form.html',{'members':members,'plans':plans})
 
-@admin_required
-def admin_feedbacks_list(request):
-    member_id = request.GET.get('member_id')
-    feedbacks = Feedback.objects.select_related('member').all().order_by('-created_at')
-    members = MemberProfile.objects.all().order_by('full_name')
-
-    if member_id:
-        feedbacks = feedbacks.filter(member_id=member_id)
-
-    context = {
-        'feedbacks': feedbacks,
-        'members' : members,
-        'selected_members_id' : int(member_id) if member_id else None,
-    }
-    return render(request, 'admin_feedbacks_list.html',context)
-
 # member section
 def member_login_view(request):
     if request.method == 'POST':
@@ -535,7 +519,7 @@ def member_login_view(request):
             messages.success(request,'Logged in successfully')
             return redirect('member_dashboard')
         else:
-            messages.error(request,'Invalid credentials or not an member.')
+            messages.error(request,'Invalid credentials or not an admin.')
     return render(request,'member_login.html')
 
 @member_required
@@ -545,10 +529,10 @@ def member_dashboard_view(request):
     total_payments = member.payment.count()
     workout_count = member.workout_plans.count()
     return render(request,'member_dashboard.html',{
-        'member': member,
-        'total_attendance': total_attendance,
-        'total_payments': total_payments,
-        'workout_count': workout_count
+        'member':member,
+        'total_attendance':total_attendance,
+        'total_payments':total_payments,
+        'workout_count':workout_count
     })
 
 @member_required
@@ -565,7 +549,6 @@ def member_membership(request):
     days_remaining = None
     total_paid = 0
     remaining = None
-    membership_status = "No Membership"
 
     if member.membership_end:
         days_remaining = (member.membership_end - timezone.now().date()).days
@@ -601,7 +584,7 @@ def member_membership(request):
 def member_payments(request):
     member_profile = MemberProfile.objects.get(user=request.user)
     payments = Payment.objects.filter(member=member_profile).select_related('plan').order_by('-payment_date')
-    return render(request,'member_payments.html',{'payments':payments})
+    return render(request, 'member_payments.html',{'payments':payments})
 
 @member_required
 def member_workout_plans(request):
@@ -612,7 +595,7 @@ def member_workout_plans(request):
 @member_required
 def member_profile(request):
     member = request.user.member_profile
-    return render(request,"member_profile.html",{'member': member})
+    return render(request,"member_profile.html",{'member':member})
 
 @member_required
 def member_profile_edit(request):
@@ -624,9 +607,9 @@ def member_profile_edit(request):
         member.gender = request.POST.get('gender')
         member.address = request.POST.get('address')
         member.save()
-        messages.success(request,'Profile updated successfully')
+        messages.success(request, 'Profile updated successfully!')
         return redirect('member_profile')
-    return render(request, 'member_profile_edit.html', {'member': member})
+    return render(request, 'member_profile_edit.html',{'member':member})
 
 @member_required
 def member_change_password(request):
@@ -636,30 +619,17 @@ def member_change_password(request):
         confirm_password = request.POST.get('confirm_password')
 
         if not request.user.check_password(current_password):
-            messages.error(request,'Current Password is incorrect')
+            messages.error(request, 'Current Password is incorrect.')
             return redirect('member_change_password')
 
         if new_password != confirm_password:
-            messages.error(request, 'Current Password is incorrect')
+            messages.error(request,'New Password and confirm password do not match.')
             return redirect('member_change_password')
 
         request.user.set_password(new_password)
         request.user.save()
-        messages.success(request, 'Password changed successfully! Please log in again')
+        messages.success(request, 'Password change successfully! Please login again')
         return redirect('member_login')
     return render(request, 'member_change_password.html')
 
-@member_required
-def member_feedback(request):
-    member = request.user.member_profile
-    if request.method == 'POST':
-        message = request.POST.get('message')
-        if message:
-            Feedback.objects.create(member=member, message=message)
-            messages.success(request, 'Your feedback has been submitted successfully!')
-            return redirect('member_feedback') #redirect to feedback page after submitted
-        else:
-            messages.error(request, 'Please enter your feedback before submitting.')
-    feedbacks = member.feedback.all().order_by('-created_at')
-    return render(request, 'member_feedback.html',{'feedbacks': feedbacks})
-
+# start from lecture 22

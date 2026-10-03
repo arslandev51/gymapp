@@ -35,8 +35,8 @@ class Trainer(models.Model):
     return f"{self.name} - {self.specialization}"
     
 class MemberProfile(models.Model):
-  GENDER_CHOICES = (
-    ('MALE','Male'),    
+  GENDER_CHOICES = ( 
+    ('MALE','Male'),
     ('FEMALE','Female'),
     ('OTHER','Other')
   )
