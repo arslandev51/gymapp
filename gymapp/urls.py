@@ -53,3 +53,5 @@ urlpatterns = [
     path('member-profile-edit',member_profile_edit,name='member_profile_edit'),
     path('member-change-password/',member_change_password,name='member_change_password')
 ]
+
+# this code is check to nowgit 
