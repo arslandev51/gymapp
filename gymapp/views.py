@@ -612,6 +612,20 @@ def member_profile_edit(request):
     return render(request, 'member_profile_edit.html',{'member':member})
 
 @member_required
+def member_feedback(request):
+    member = request.user.member_profile
+    if request.method == 'POST':
+        message = request.POST.get('message')
+        if message:
+            Feedback.objects.create(member=member,message=message)
+            messages.success(request, 'Your feedback has been submitted successfully!')
+            return redirect('member_feedback')
+        else:
+            messages.error(request,'Please enter your feedback before submitting.')
+    feedbacks = member.feedback.all().order_by('-created_at')
+    return render(request,'member_feedback.html',{'feedbacks':feedbacks})
+
+@member_required
 def member_change_password(request):
     if request.method == 'POST':
         current_password = request.POST.get('current_password')
@@ -632,4 +646,18 @@ def member_change_password(request):
         return redirect('member_login')
     return render(request, 'member_change_password.html')
 
-# start from lecture 22
+@admin_required
+def admin_feedbacks_list(request):
+    member_id = request.GET.get('member_id')
+    feedbacks = Feedback.objects.select_related('member').all().order_by('-created_at')
+    members = MemberProfile.objects.all().order_by('full_name')
+
+    if member_id:
+        feedbacks = feedbacks.filter(member_id=member_id)
+
+    context = {
+        'feedbacks':feedbacks,
+        'members':members,
+        'selected_member_id':int(member_id) if member_id else None,
+    }
+    return render(request, 'admin_feedback_list.html',context)
