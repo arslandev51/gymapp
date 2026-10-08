@@ -1,28 +1,106 @@
-{% extends 'base.html' %}
+{% load static %}
+<!doctype html>
+<html lang="en">
 
-{% block content %}
+<head>
+    {% include 'partials/links.html' %}
+</head>
 
-<div class="row justify-content-center">
-	<div class="col-md-4">
-    <div class="card shadow-sm">
-      <div class="card-header bg-dark text-white">
-        Admin Login
-      </div>
-      <div class="card-body">
-        <form method="POST">
-          {% csrf_token %}
-          <div class="mb-3">
-            <label class="form-label">UserName</label>
-            <input type="text" name="username" class="form-control" required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Password</label>
-            <input type="text" name="password" class="form-control" required>
-          </div>
-          <button type="submit" class="btn btn-dark w-100">Login</button>
-        </form>
-      </div>
+<body>
+    <!-- <body data-layout="horizontal"> -->
+    <div class="auth-page">
+        <div class="container-fluid p-0">
+            <div class="row g-0">
+                <div class="col-xxl-3 col-lg-4 col-md-5">
+                    <div class="auth-full-page-content d-flex p-sm-5 p-4">
+                        <div class="w-100">
+                            <div class="d-flex flex-column h-100">
+                                <div class="text-center">
+                                    <a href="index.html" class="d-block auth-logo">
+                                        <img src="{% static 'assets/images/gym-logo.png' %}" alt="" height="70">
+                                    </a>
+                                </div>
+                                <div class="auth-content my-auto">
+                                    <div class="text-center">
+                                        <h5 class="mb-0">Welcome Back !</h5>
+                                    </div>
+                                    <form class="mt-4 pt-2" method="POST">
+                                        {% csrf_token %}
+                                        <div class="mb-3">
+                                            <label class="form-label">UserName</label>
+                                            <input type="text" class="form-control" name="username" id="username"
+                                                placeholder="Enter username">
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="d-flex align-items-start">
+                                                <div class="flex-grow-1">
+                                                    <label class="form-label">Password</label>
+                                                </div>
+                                            </div>
+                                            <div class="input-group auth-pass-inputgroup">
+                                                <input type="password" class="form-control" name="password"
+                                                    placeholder="Enter password" aria-label="Password"
+                                                    aria-describedby="password-addon">
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <button class="btn btn-primary w-100 waves-effect waves-light"
+                                                type="submit">Log In</button>
+                                        </div>
+                                    </form>
+                                    <div class="mt-5 text-center">
+                                        <p class="text-muted mb-0">Don't have an account ? <a href="auth-register.html"
+                                                class="text-primary fw-semibold"> Signup now </a> </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end auth full page content -->
+                </div>
+                <!-- end col -->
+                <div class="col-xxl-9 col-lg-8 col-md-7">
+                    <div class="auth-bg pt-md-5 p-4 d-flex">
+                        <div class="bg-overlay bg-primary"></div>
+                        <ul class="bg-bubbles">
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                        </ul>
+                        <!-- end bubble effect -->
+                        <div class="row justify-content-center align-items-center">
+                            <div class="col-xl-7">
+                                <div class="testi-contain text-white">
+                                    <i class="bx bxs-quote-alt-left text-success display-6"></i>
+                                    <h4 class="mt-4 fw-medium lh-base text-white">“Our gym is a welcoming and motivating
+                                        place designed to help you achieve your fitness goals. We provide modern
+                                        equipment, professional trainers, and personalized workout plans for every
+                                        fitness level. Whether your goal is weight loss, muscle gain, or improving
+                                        overall health, we are here to support you. Our friendly environment encourages
+                                        consistency, confidence, and a healthy lifestyle. Join us today and take the
+                                        first step toward a stronger, healthier, and fitter you.”
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end col -->
+            </div>
+            <!-- end row -->
+        </div>
+        <!-- end container fluid -->
     </div>
-  </div>
-</div>
-{% endblock %}
+
+    {% include 'partials/scripts.html' %}
+
+</body>
+
+</html>
