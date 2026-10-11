@@ -1,12 +1,67 @@
-{% extends 'base.html' %}
+{% extends 'left-sidebar.html' %}
 
 {% block content %}
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-  <h2>Equipment</h2>
-  <a href="{% url 'admin_equipment_add' %}" class="btn btn-primary">Add New Equipment</a>
+<div class="row">
+  <div class="col-12">
+    <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+      <h4 class="mb-sm-0 font-size-18">Equipment</h4>
+      <a href="{% url 'admin_equipment_add' %}" class="btn btn-primary waves-effect waves-light">Add New Equipment</a>
+    </div>
+  </div>
 </div>
-  <table class="table table-bordered table-triped">
+
+<!-- its -->
+
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+
+        <table id="datatable" class="table table-bordered dt-responsive  nowrap w-100">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Units</th>
+              <th>Price</th>
+              <th>Purchase Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for equipment in equipments %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{ equipment.name }}</td>
+              <td>{{ equipment.units }}</td>
+              <td>{{ equipment.price }}</td>
+              <td>{{ equipment.purchase_date }}</td>
+              <td>
+                <a href="{% url 'admin_equipment_edit' equipment.id %}" class="btn btn-info btn-sm waves-effect waves-light">Edit</a>
+                <form method="post" action="{% url 'admin_equipment_delete' equipment.id %}" style="display: inline-block;">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-danger btn-sm waves-effect waves-light"
+                    onclick="return confirm('Are you sure to want to delete this equipment?')">Delete</button>
+                </form>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="8" class="text-center">No equipment record found.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+  </div> <!-- end col -->
+</div> <!-- end row -->
+
+
+<!-- <table class="table table-bordered table-triped">
     <thead class="table-dark">
       <tr>
         <th>#</th>
@@ -35,7 +90,7 @@
         </tr>
       {% endfor %}
     </tbody>
-  </table>
+  </table> -->
 
 
 {% endblock %}

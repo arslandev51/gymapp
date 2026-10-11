@@ -1,47 +1,72 @@
-{% extends 'base.html' %}
+{% extends 'left-sidebar.html' %}
 
 {% block content %}
 
+<div class="row">
+  <div class="col-12">
+    <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+      <h4 class="mb-sm-0 font-size-18">Enquiries</h4>
+    </div>
+  </div>
+</div>
 
-<h2 class="mb-3">Enquiries</h2>
-  <table class="table table-bordered table-triped">
-    <thead class="table-dark">
-      <tr>
-        <th>#</th>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Phone</th>
-        <th>Message</th>
-        <th>Created At</th>
-        <th>Status</th>
-        <th>Update</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for enquiry in enquiries %}
-        <tr>
-          <td>{{ forloop.counter }}</td>
-          <td>{{ enquiry.name }}</td>
-          <td>{{ enquiry.email }}</td>
-          <td>{{ enquiry.mobile }}</td>
-          <td style="max-width: 250px;">{{ enquiry.message }}</td>
-          <td>{{ enquiry.created_at }}</td>
-          <td>{{ enquiry.status }}</td>
-          <td>
-            <form method="post" action="{% url 'admin_enquiry_update_status' enquiry.id %}">
-            {% csrf_token %}
-            <select name="status" class="form-select form-select-sm mb-2">
-              <option value="NEW" {% if enquiry.status == 'NEW' %}selected{% endif %}>NEW</option>
-              <option value="SEEN" {% if enquiry.status == 'SEEN' %}selected{% endif %}>SEEN</option>
-              <option value="RESOLVED" {% if enquiry.status == 'RESOLVED' %}selected{% endif %}>RESOLVED</option>
-            </select>
-            <button type="submit" class="btn btn-sm btn-primary w-100">Update</button>
-          </form>
-          </td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+<!-- use -->
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+
+        <table id="datatable" class="table table-bordered dt-responsive  nowrap w-100">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Message</th>
+              <th>Created At</th>
+              <th>Status</th>
+              <th>Update</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for equipment in equipments %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{ enquiry.name }}</td>
+              <td>{{ enquiry.email }}</td>
+              <td>{{ enquiry.mobile }}</td>
+              <td style="max-width: 250px;">{{ enquiry.message }}</td>
+              <td>{{ enquiry.created_at }}</td>
+              <td>{{ enquiry.status }}</td>
+              <td>
+                <form method="post" action="{% url 'admin_enquiry_update_status' enquiry.id %}">
+                  {% csrf_token %}
+                  <select name="status" required class="form-control form-select">
+                    <option value="NEW" {% if enquiry.status == 'NEW' %}selected{% endif %}>New</option>
+                    <option value="SEEN" {% if enquiry.status == 'SEEN' %}selected{% endif %}>Seen</option>
+                    <option value="RESOLVED" {% if enquiry.status == 'RESOLVED' %}selected{% endif %}>Resolved</option>
+                  </select>
+                </form>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="8" class="text-center">No enquiry record found.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+  </div> <!-- end col -->
+</div> <!-- end row -->
+<!-- end use -->
+
+
+
 
 
 {% endblock %}
