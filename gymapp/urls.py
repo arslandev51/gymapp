@@ -5,7 +5,7 @@ urlpatterns = [
     # path('home/',home,name="home"),
     # path('about/',about,name='about'),
     # login,logout,dashboard
-    path('admin-login/',admin_login_view,name='admin_login'),
+    path('',admin_login_view,name='admin_login'),
     path('admin-dashboard/',admin_dashboard_view,name='admin_dashboard'),
     path('logout/',logout_view,name='logout'),
     # plan
