@@ -1,12 +1,73 @@
-{% extends 'base.html' %}
+{% extends 'left-sidebar.html' %}
 
 {% block content %}
 
-<div class="d-flex justify-content-between align-items-center mb-3">
+<div class="row">
+  <div class="col-12">
+    <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+      <h4 class="mb-sm-0 font-size-18">Workout / Diet Plans</h4>
+      <a href="{% url 'admin_workout_plan_add' %}" class="btn btn-sm btn-primary">Add Workout / Diet Plan</a>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="d-flex justify-content-between align-items-center mb-3">
   <h2>Workout / Diet Plans</h2>
   <a href="{% url 'admin_workout_plan_add' %}" class="btn btn-primary">Add Workout / Diet Plan</a>
+</div> -->
+
+<form method="get" class="row">
+
+  <div class="col-xl-3 col-md-3">
+    <div class="form-group mb-3">
+      <select name="member_id" required class="form-control form-select">
+        <option value="">All Members</option>
+        {% for member in members %}
+        <option value="{{ member.id }}" {% if member.id|stringformat:"s" == selected_member_id %}selected{% endif %}>
+          {{ member.full_name }}
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+
+  <!-- <div class="col-xl-3 col-md-3">
+    <div class="form-group mb-3">
+      <select name="member_id" required class="form-control form-select">
+        <option value="">All Status</option>
+        <option value="PAID" {% if selected_status == 'PAID' %}selected{% endif %}>Paid</option>
+        <option value="PENDING" {% if selected_status == 'PENDING' %}selected{% endif %}>Pending</option>
+      </select>
+    </div>
+  </div> -->
+
+  <div class="col-lg-3 col-md-3">
+    <button type="submit" class="btn btn-primary waves-effect waves-light">Filter</button>
+  </div>
+</form>
+
+<div class="row g-3">
+  {% for wp in workout_plans %}
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+          <span>{{ wp.title }}</span>
+          <small>{{ wp.member.full_name }}</small>
+        </div>
+        <div class="card-body">
+          <p class="small text-muted mb-1">{{ wp.created_at }}</p>
+          <p style="white-space: pre-line;">{{ wp.description }}</p>
+          <form method="post" action="{% url 'admin_workout_plan_delete' wp.id %}" onsubmit="return confirm('Want to Delete your workout plan')">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
 </div>
-<form method="get" class="row g-2 mb-3">
+
+<!-- <form method="get" class="row g-2 mb-3">
   <div class="col-md-4">
     <select name="member_id" class="form-select">
       <option value="">All Members</option>
@@ -41,7 +102,7 @@
       </div>
     </div>
   {% endfor %}
-</div>
+</div> -->
 
 
 {% endblock %}

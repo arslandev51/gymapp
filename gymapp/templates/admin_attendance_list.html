@@ -1,32 +1,78 @@
-{% extends 'base.html' %}
+{% extends 'left-sidebar.html' %}
 
 {% block content %}
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-  <h2>Attendance ({{ selected_date }})</h2>
-  <a href="{% url 'admin_attendance_add' %}" class="btn btn-primary">Mark Attendance</a>
+<div class="row">
+  <div class="col-12">
+    <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+      <h4 class="mb-sm-0 font-size-18">Attendance ({{ selected_date }})</h4>
+      <a href="{% url 'admin_attendance_add' %}" class="btn btn-primary waves-effect waves-light">Mark Attendance</a>
+    </div>
+  </div>
 </div>
-<form method="get" class="row g-2 mb-3">
-  <div class="col-md-4">
-    <label class="form-label">Date</label>
+<!-- use -->
+<form method="get" class="row">
+
+  <div class="col-xl-3 col-md-3">
     <input type="date" name="date" class="form-control" value="{{ selected_date }}">
   </div>
-  <div class="col-md-4">
-    <label class="form-label">Member</label>
-    <select name="member_id" class="form-select">
-      <option value="">All Members</option>
-      {% for member in members %}
+
+  <div class="col-xl-3 col-md-3">
+    <div class="form-group mb-3">
+      <select name="member_id" required class="form-control form-select">
+        <option value="">All Members</option>
+        {% for member in members %}
         <option value="{{ member.id }}" {% if member.id|stringformat:"s" == selected_member_id %}selected{% endif %}>
           {{ member.full_name }}
         </option>
-      {% endfor %}
-    </select>
+        {% endfor %}
+      </select>
+    </div>
   </div>
-  <div class="col-md-2 d-flex align-items-end">
-    <button type="submit" class="btn btn-secondary">Filter</button>
+
+  <div class="col-lg-4">
+    <button type="submit" class="btn btn-primary waves-effect waves-light">Filter</button>
   </div>
 </form>
-  <table class="table table-bordered table-triped">
+<!-- end use -->
+
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+
+        <table id="datatable" class="table table-bordered dt-responsive  nowrap w-100">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Member</th>
+              <th>Date</th>
+              <th>Time in</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for attendance in attendances %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{ attendance.member.full_name }}</td>
+              <td>{{ attendance.date }}</td>
+              <td>{{ attendance.time_in }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="8" class="text-center">No attendance record found.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+  </div> <!-- end col -->
+</div> <!-- end row -->
+
+  <!-- <table class="table table-bordered table-triped">
     <thead class="table-dark">
       <tr>
         <th>#</th>
@@ -42,11 +88,9 @@
           <td>{{ attendance.member.full_name }}</td>
           <td>{{ attendance.date }}</td>
           <td>{{ attendance.time_in }}</td>
-          
         </tr>
       {% endfor %}
     </tbody>
-  </table>
-
+  </table> -->
 
 {% endblock %}

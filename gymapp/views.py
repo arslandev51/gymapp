@@ -3,23 +3,23 @@ from .models import *
 from django.contrib import messages
 
 # Create your views here.
-def home(request):
-    '''simple homepage + contact enquiry page form'''
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        email = request.POST.get('email')
-        mobile = request.POST.get('mobile')
-        message = request.POST.get('message')
-        if name and email and mobile and message:
-            Enquiry.objects.create(name=name,email=email,mobile=mobile,message=message)
-            messages.success(request,'Your enquiry has been submitted successfully!')
-            return redirect('home')  #Redirect to homepage after submission
-        else:
-            messages.error(request,'Please fill in all fields.')
-    return render(request,'home.html')
+# def home(request):
+#     '''simple homepage + contact enquiry page form'''
+#     if request.method == 'POST':
+#         name = request.POST.get('name')
+#         email = request.POST.get('email')
+#         mobile = request.POST.get('mobile')
+#         message = request.POST.get('message')
+#         if name and email and mobile and message:
+#             Enquiry.objects.create(name=name,email=email,mobile=mobile,message=message)
+#             messages.success(request,'Your enquiry has been submitted successfully!')
+#             return redirect('home')  #Redirect to homepage after submission
+#         else:
+#             messages.error(request,'Please fill in all fields.')
+#     return render(request,'home.html')
 
-def about(request):
-    return render(request,'about.html')
+# def about(request):
+#     return render(request,'about.html')
 
 from django.contrib.auth import authenticate, login, logout
 
@@ -70,7 +70,7 @@ def admin_dashboard_view(request):
 def logout_view(request):
     logout(request)
     messages.info(request,'Logged out successfully.')
-    return redirect('home')
+    return redirect('admin_login')
 
 # admin planning detail here
 @admin_required
@@ -612,6 +612,20 @@ def member_profile_edit(request):
     return render(request, 'member_profile_edit.html',{'member':member})
 
 @member_required
+def member_feedback(request):
+    member = request.user.member_profile
+    if request.method == 'POST':
+        message = request.POST.get('message')
+        if message:
+            Feedback.objects.create(member=member,message=message)
+            messages.success(request, 'Your feedback has been submitted successfully!')
+            return redirect('member_feedback')
+        else:
+            messages.error(request,'Please enter your feedback before submitting.')
+    feedbacks = member.feedback.all().order_by('-created_at')
+    return render(request,'member_feedback.html',{'feedbacks':feedbacks})
+
+@member_required
 def member_change_password(request):
     if request.method == 'POST':
         current_password = request.POST.get('current_password')
@@ -632,4 +646,18 @@ def member_change_password(request):
         return redirect('member_login')
     return render(request, 'member_change_password.html')
 
-# start from lecture 22
+@admin_required
+def admin_feedbacks_list(request):
+    member_id = request.GET.get('member_id')
+    feedbacks = Feedback.objects.select_related('member').all().order_by('-created_at')
+    members = MemberProfile.objects.all().order_by('full_name')
+
+    if member_id:
+        feedbacks = feedbacks.filter(member_id=member_id)
+
+    context = {
+        'feedbacks':feedbacks,
+        'members':members,
+        'selected_member_id':int(member_id) if member_id else None,
+    }
+    return render(request, 'admin_feedback_list.html',context)

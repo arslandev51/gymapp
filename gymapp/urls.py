@@ -2,10 +2,10 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
-    path('home/',home,name="home"),
-    path('about/',about,name='about'),
+    # path('home/',home,name="home"),
+    # path('about/',about,name='about'),
     # login,logout,dashboard
-    path('admin-login/',admin_login_view,name='admin_login'),
+    path('',admin_login_view,name='admin_login'),
     path('admin-dashboard/',admin_dashboard_view,name='admin_dashboard'),
     path('logout/',logout_view,name='logout'),
     # plan
@@ -51,6 +51,9 @@ urlpatterns = [
     path('member-workout-plans/',member_workout_plans,name='member_workout_plans'),
     path('member-profile/',member_profile,name='member_profile'),
     path('member-profile-edit',member_profile_edit,name='member_profile_edit'),
-    path('member-change-password/',member_change_password,name='member_change_password')
+    path('member-change-password/',member_change_password,name='member_change_password'),
+    path('member-feedback/',member_feedback,name='member_feedback'),
+    path('member-feedback-list/',admin_feedbacks_list,name='admin_feedbacks_list')
 ]
 
+# this code is check to nowgit 

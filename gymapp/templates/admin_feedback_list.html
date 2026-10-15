@@ -1,0 +1,122 @@
+{% extends 'left-sidebar.html' %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-12">
+    <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+      <h4 class="mb-sm-0 font-size-18">Members Feedbacks</h4>
+    </div>
+  </div>
+</div>
+
+<!-- <h2 class="mb-3">Members Feedback</h2> -->
+
+<form method="get" class="row">
+
+  <div class="col-xl-3 col-md-3">
+    <div class="form-group mb-3">
+      <select name="member_id" required class="form-control form-select">
+        <option value="">All Members</option>
+        {% for member in members %}
+        <option value="{{ member.id }}" {% if member.id == selected_member_id %}selected{% endif %}>
+          {{ member.full_name }}
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+
+  <!-- <div class="col-xl-3 col-md-3">
+    <div class="form-group mb-3">
+      <select name="member_id" required class="form-control form-select">
+        <option value="">All Status</option>
+        <option value="PAID" {% if selected_status == 'PAID' %}selected{% endif %}>Paid</option>
+        <option value="PENDING" {% if selected_status == 'PENDING' %}selected{% endif %}>Pending</option>
+      </select>
+    </div>
+  </div> -->
+
+  <div class="col-lg-3 col-md-3">
+    <button type="submit" class="btn btn-secondary waves-effect waves-light">Filter</button>
+  </div>
+</form>
+
+<!-- <form method="get" class="row g-2 mb-3">
+  <div class="col-md-4" style="display: inline-block;">
+    <select name="member_id" class="form-select">
+      <option value="">All Members</option>
+      {% for member in members %}
+        <option value="{{ member.id }}" {% if member.id == selected_member_id %}selected{% endif %}>
+          {{ member.full_name }}
+        </option>
+      {% endfor %}
+    </select>
+  </div>
+  
+  <div class="col-md-2 d-flex align-items-end">
+    <button type="submit" class="btn btn-secondary">Filter</button>
+  </div>
+</form> -->
+
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+
+        <table id="datatable" class="table table-bordered dt-responsive  nowrap w-100">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Member</th>
+              <th>Message</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for feedback in feedbacks %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{ feedback.member.full_name }}</td>
+              <td>{{ feedback.message }}</td>
+              <td>{{ feedback.created_at }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="8" class="text-center">No feedback record found.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+  </div> <!-- end col -->
+</div> <!-- end row -->
+
+<!-- <table class="table table-bordered table-triped">
+  <thead class="table-dark">
+    <tr>
+      <th>#</th>
+      <th>Member</th>
+      <th>Message</th>
+      <th>Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for feedback in feedbacks %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>{{ feedback.member.full_name }}</td>
+      <td>{{ feedback.message }}</td>
+      <td>{{ feedback.created_at }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="8" class="text-center">No feedback found.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table> -->
+{% endblock %}
